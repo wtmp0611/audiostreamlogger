@@ -1,11 +1,225 @@
-.button {
-    font: bold 11px Arial;
+/* TOEGEVOEGD/AANGEPAST (William, 6 sept 2026): ÉÉN gedeelde regel voor
+   ALLE knoppen, de downloadlink ("downloadbutton", een <a> met
+   class="button") én de zender-/datum-/uur-velden, zodat ze allemaal
+   exact dezelfde hoogte, hetzelfde lettertype (niet vet) EN dezelfde
+   kleuren hebben.
+   De kleuren (achtergrond/tekst/rand) waren voorheen alleen op .button
+   gezet, niet op de gewone <button>-elementen. Daardoor liet Chrome de
+   "Selection Start"-achtige knoppen zelf donker kleuren zodra Windows/
+   Chrome in donkere modus staat (Chrome kleurt ongestylede
+   formulier-knoppen automatisch donker om bij donkere modus te passen,
+   tenzij de pagina zelf al een kleur opgeeft) -- terwijl "Download
+   recording" wél altijd licht bleef, omdat die zijn kleur al kreeg via
+   .button. Vandaar het verschil dat je zag. Door nu OOK aan alle gewone
+   <button>-elementen expliciet een eigen achtergrond/tekstkleur te geven,
+   negeert Chrome zijn eigen donkere-modus-kleuring en blijft alles er
+   overal hetzelfde uitzien, ongeacht de instellingen van de bezoeker. */
+button,
+.button,
+select,
+input[type="date"] {
+    display: inline-block;
+    height: 26px;
+    padding: 0 8px;
+    font: 12px Arial;
+    font-weight: normal;
+    box-sizing: border-box;
+    vertical-align: middle;
+    line-height: 1;
     text-decoration: none;
     background-color: #EEEEEE;
     color: #333333;
-    padding: 2px 6px 2px 6px;
     border-top: 1px solid #CCCCCC;
     border-right: 1px solid #333333;
     border-bottom: 1px solid #333333;
     border-left: 1px solid #CCCCCC;
+}
+
+/* TOEGEVOEGD (William, 6 sept 2026): "Download recording" is een <a>
+   (link), geen echte <button>. Een <button> centreert zijn tekst
+   automatisch verticaal in het vak -- dat zit ingebakken in hoe de
+   browser een <button> intern opbouwt. Een <a> doet dat NIET vanzelf: die
+   plakt de tekst gewoon bovenaan het vak, met de overgebleven ruimte
+   eronder (precies wat je zag). Fix: voor déze link specifiek expliciet
+   met flexbox verticaal (en horizontaal) centreren. */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================================================
+   TOEGEVOEGD (William, 5 sept 2026): stijl voor de bestandsnaam-weergave en
+   de voortgangsbalk-over-de-golfvorm (zie extra.js voor de werking).
+   ============================================================================ */
+
+/* De "wrapper" om de golfvorm heen heeft position:relative nodig, zodat de
+   voortgangsbalk (die position:absolute gebruikt) precies erover heen komt
+   te liggen in plaats van ergens anders op de pagina. */
+#waveformWrapper {
+    position: relative;
+    margin: 10px auto;
+    max-width: 900px;
+}
+
+/* TOEGEVOEGD (William, 6 sept 2026): vast "doosje" om de speeltijd + de
+   bestandsnaam heen, met een vaste lichte achtergrond en donkere tekst --
+   zo blijft deze tekst altijd leesbaar, ongeacht welke achtergrondkleur
+   er via de kleurenkiezer hierboven gekozen is (bijv. donkerrood zoals in
+   het voorbeeld dat William liet zien). */
+#infoBalk {
+    display: inline-block;
+    background-color: #EEEEEE;
+    color: #333;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    padding: 6px 14px;
+    margin: 8px auto;
+    font: bold 12px Arial;
+}
+
+#huidigBestand {
+    display: block;
+    min-height: 1.2em;
+    margin-top: 2px;
+}
+
+/* Ligt precies over de golfvorm heen (position:absolute + top/left/right/
+   bottom:0 dekt de hele #waveformWrapper af). display:none totdat er echt
+   iets geladen wordt -- extra.js zet 'm op display:flex tijdens het laden
+   en weer terug op display:none zodra de opname klaarstaat. */
+#laadVoortgang {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(247, 247, 247, 0.7);
+    border: 1px solid #ccc;
+    font: bold 13px Arial;
+    color: #333;
+}
+
+#laadVoortgangBalkAchtergrond {
+    width: 70%;
+    max-width: 400px;
+    height: 14px;
+    background: #ddd;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+#laadVoortgangBalkVulling {
+    width: 0%;
+    height: 100%;
+    background: purple;
+    transition: width 0.15s linear;
+}
+
+/* TOEGEVOEGD (William, 5 sept 2026), fix nummer 2: de golfvorm-bibliotheek
+   tekent zijn eigen laagjes intern met z-index, en die "ontsnappen" naar
+   de dichtstbijzijnde voorouder die zelf position/relative heeft als
+   #waveform dat niet heeft. Door #waveform zelf ook expliciet
+   position:relative + een eigen (lage) z-index te geven, blijven die
+   interne laagjes binnen #waveform opgesloten, en wint de balk (die een
+   veel hogere z-index heeft) daar altijd overheen. */
+#waveform {
+    position: relative;
+    z-index: 1;
+}
+
+/* TOEGEVOEGD (William, 6 sept 2026), fix nummer 3: duidelijke melding als
+   er voor de gekozen zender/datum/tijd geen opname bestaat (zie extra.js). */
+#laadFout {
+    color: red;
+    text-align: center;
+    display: none;
+}
+
+/* TOEGEVOEGD (William, 6 sept 2026): nieuwe zender/datum/uur-kiezer (zie
+   datumkiezer.js). Browsers geven een disabled <option> vanzelf al een
+   grijzere kleur -- deze regel maakt dat verschil iets duidelijker. */
+#uurKeuzeNieuw option:disabled {
+    color: #aaa;
+}
+/* TOEGEVOEGD (William, 8 sept 2026): het nieuwe "pulldownblok" voor de
+   uren -- knop + paneel met een grid van 4 rijen x 6 uur-knoppen. De
+   #uurKeuzeNieuw hierboven blijft functioneel bestaan (verborgen), dit
+   is puur de zichtbare/klikbare laag eromheen. */
+#uurPulldown {
+    position: relative;
+    display: inline-block;
+}
+#uurTriggerKnop {
+    min-width: 74px;
+}
+#uurPaneel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background: #fff;
+    border: 1px solid #999;
+    padding: 4px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+}
+.uurCel {
+    width: 32px;
+    height: 26px;
+    font: 12px Arial;
+    cursor: pointer;
+}
+.uurCel:disabled {
+    color: #aaa;
+    cursor: default;
+}
+.uurCel.actief {
+    background: #cde;
+    font-weight: bold;
+}
+
+#geenOpnamesDieDag {
+    text-align: center;
+    color: #555;
+    font: 12px Arial;
+}
+
+/* TOEGEVOEGD (William, 6 sept 2026): dagnaam + datumveld samen in één
+   doosje, met dezelfde hoogte/stijl als de andere velden hiernaast --
+   zonder dit doosje stond "Saturday" als losse tekst naast de datumkiezer,
+   en zag het er niet uit als bij elkaar horend. Het datumveld zelf krijgt
+   hierbinnen geen eigen rand/achtergrond meer (die had het al via de
+   algemene "input[type=date]"-regel hierboven), zodat het opgaat in het
+   doosje in plaats van een tweede, eigen doosje te vormen. */
+#datumGroep {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    background-color: #EEEEEE;
+    color: #333333;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    font: 12px Arial;
+    vertical-align: middle;
+}
+
+#datumGroep input[type="date"] {
+    height: auto;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    box-sizing: content-box;
 }

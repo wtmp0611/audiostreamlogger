@@ -1,0 +1,16 @@
+# Audio-opnames horen niet mee in de Docker build - dat scheelt enorm veel
+# tijd bij het bouwen. Zonder dit bestand stuurt Docker al je opnames mee
+# als "bouwmateriaal" naar het bouwproces, ook al gebruikt geen enkele
+# build daar ook maar iets van (die map wordt pas gekoppeld als het
+# programma al draait, niet tijdens het bouwen zelf).
+audio/
+
+# De backup-map van de cleaner-fix hoeft ook niet mee
+backup/
+
+# Git-geschiedenis is niet nodig om te kunnen bouwen
+.git/
+
+# Overige rommel die nooit nodig is om te bouwen
+*.log
+node_modules/

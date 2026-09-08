@@ -1,26 +1,69 @@
 {
    "cleaner" : {
-      "log_retention": 2,
-      "cleaner_minute" : 10
+      "log_retention":   244,
+      "cleaner_minute" : 59
    },
    "peakfilegenerator" : {
-      "peakfile_minute":5
+      "peakfile_minute": 2
    },
    "recorder" : {
-      "recorder_minute":0
+      "recorder_minute": 0
    },
    "streams":[
       {
-         "country":"Netherlands",
-         "name":"Glow_FM",
-         "folder":"glowfm",
-         "url":"https://stream.glowfm.nl/glowfm.mp3"
+         "country": "Netherlands",
+         "name": "NPO_Radio_1",
+         "folder": "Nporadio1",
+         "url": "https://icecast.omroep.nl/radio1-bb-mp3"
       },
       {
-         "country":"Netherlands",
-         "name":"RTV_Connect",
-         "folder":"rtvconnect",
-         "url":"https://stream.rtvconnect.nl/radio/8000/ffm-320-mp3"
+         "country": "Netherlands",
+         "name": "4ever49",
+         "folder": "4ever49",
+         "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/4EVER49.mp3"
+      },
+      {
+         "country": "Netherlands",
+         "name": "Qmusic_NL",
+         "folder": "Qmusicnl",
+         "url": "https://icecast-qmusicnl-cdp.triple-it.nl/Qmusic_nl_live_high.aac"
+      },
+      {
+         "country": "Netherlands",
+         "name": "SAM Ibiza",
+         "folder": "SAM_Ibiza",
+         "url": "https://stream.samibiza.com/samibiza_fm"
+
+      },
+      {
+         "country": "Netherlands",
+         "name": "SLAM!",
+         "folder": "Slam",
+         "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/SLAM_MP3.mp3"
+      },
+      {
+         "country": "Netherlands",
+         "name": "Sublime",
+         "folder": "Sublime",
+         "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/SUBLIME.mp3"
+      },
+      {
+         "country": "Netherlands",
+         "name": "Radio_Veronica",
+         "folder": "Veronica",
+         "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/VERONICA.mp3"
+      },
+      {
+         "country": "Netherlands",
+         "name": "Radio_538",
+         "folder": "Radio_538",
+         "url": "https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3"
+      },
+      {
+         "country": "Netherlands",
+         "name": "Wild FM",
+         "folder": "Wild_fm",
+         "url": "https://stream.wildfm.nl/wildfm.mp3"
       }
    ]
 }

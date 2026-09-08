@@ -1,14 +1,4 @@
 services:
-  recorder:
-    build:
-      context: .
-      dockerfile: Dockerfile.recorder
-    volumes:
-      - ./audio:/usr/src/app/audio
-      - ./settings.json:/usr/src/app/settings.json
-    environment:
-      - TZ=Europe/Amsterdam
-
   cleaner:
     build:
       context: .
@@ -18,7 +8,6 @@ services:
       - ./settings.json:/usr/src/app/settings.json
     environment:
       - TZ=Europe/Amsterdam
-
   peakfilegenerator:
     build:
       context: .
@@ -28,7 +17,15 @@ services:
       - ./settings.json:/usr/src/app/settings.json
     environment:
       - TZ=Europe/Amsterdam
-
+  recorder:
+    build:
+      context: .
+      dockerfile: Dockerfile.recorder
+    volumes:
+      - ./audio:/usr/src/app/audio
+      - ./settings.json:/usr/src/app/settings.json
+    environment:
+      - TZ=Europe/Amsterdam
   frontend:
     build:
       context: .
@@ -43,7 +40,5 @@ services:
       - PORT=${PORT}
     networks:
       - web-network
-
-
 networks:
   web-network:

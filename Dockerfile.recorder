@@ -1,23 +1,28 @@
 # Use the official Node.js image
 FROM node:16
-
+# ============================================================================
+# FIX (William, 5 sept 2026): deze node:16-image draait op Debian "buster",
+# en die Debian-versie is inmiddels "end of life" - de gewone downloadservers
+# (deb.debian.org) hebben buster niet meer, die staat nu alleen nog in het
+# archief (archive.debian.org). Zonder deze regel krijg je "404 Not Found"
+# zodra apt-get probeert te installeren. Deze regel wijst apt gewoon om naar
+# dat archief, vlak voordat we iets installeren - verder verandert er niets.
+# ============================================================================
+RUN sed -i \
+    -e 's/deb.debian.org/archive.debian.org/g' \
+    -e 's/security.debian.org/archive.debian.org/g' \
+    /etc/apt/sources.list
 # Install ffmpeg
 RUN apt-get update && apt-get install -y ffmpeg
-
 # Create and change to the app directory
 WORKDIR /usr/src/app
-
 # Copy package.json and package-lock.json
 COPY recorder/package*.json ./
-
 # Install dependencies
 RUN npm install
-
 # Copy the recorder script
 COPY recorder/recorder.js ./
-
 # Ensure the audio directory exists
 RUN mkdir -p /usr/src/app/audio
-
 # Command to run the recorder script
 CMD ["node", "recorder.js"]

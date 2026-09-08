@@ -1,20 +1,24 @@
 # Use the official Node.js image
 FROM node:16
-
 # Create and change to the app directory
 WORKDIR /usr/src/app
-
+# ============================================================================
+# FIX (William, 5 sept 2026): zie de toelichting in Dockerfile.recorder -
+# deze node:16-image draait op Debian "buster", wat inmiddels "end of life"
+# is. Deze regel wijst apt om naar het archief (archive.debian.org) in
+# plaats van de verdwenen normale servers, vlak voordat we iets installeren.
+# ============================================================================
+RUN sed -i \
+    -e 's/deb.debian.org/archive.debian.org/g' \
+    -e 's/security.debian.org/archive.debian.org/g' \
+    /etc/apt/sources.list
 # Install ffmpeg
 RUN apt-get update && apt-get install -y ffmpeg
-
 # Copy package.json and package-lock.json from the frontend directory
 COPY frontend/package*.json ./
-
 # Install Node.js dependencies
 RUN npm install
-
 # Copy the rest of the application code from the frontend directory
 COPY frontend/ .
-
 # Command to run the application
 CMD ["node", "index.js"]

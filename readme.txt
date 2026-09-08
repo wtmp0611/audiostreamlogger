@@ -2,7 +2,7 @@ This is the AudioStreamLogger!
 
 This project contains a multi-service Docker application for recording, cleaning, generating peak files, and serving a frontend for audio files. The setup uses Docker Compose to manage the services and their interactions.
 
-This is William's fork of the original project by Dennis (denhoo4/audiostreamlogger), with a number of fixes and new features added on top. All credit for the original design goes to Dennis - see "What's different from the original" below for what has changed in this fork.
+This is wtmp0611's fork of the original project by Dennis (denhoo4/audiostreamlogger), with a number of fixes and new features added on top. All credit for the original design goes to Dennis - see "What's different from the original" below for what has changed in this fork.
 
 Prerequisites
 
@@ -142,9 +142,10 @@ What's different from the original (denhoo4/audiostreamlogger)
 	•	Codec-aware transcoding in the recorder (see "Recording behavior" above), instead of always transcoding every stream to a fixed MP3 bitrate regardless of the source.
 	•	Recording length ("duration_minutes") is now configurable in settings.json instead of fixed in the code, and defaults to 61 minutes (1 minute of overlap between recordings) instead of the original 60 - see "Configuration" above.
 	•	Frontend: a station/date/hour picker (hours without a recording for the selected station/date are shown greyed out and can't be clicked), a loading progress bar with a "now loading <filename>" display, a clear on-screen message when a chosen recording doesn't exist instead of the page hanging, a permanent per-visitor background color picker (saved in a cookie), and a consistent height/font/color across every button and input field on the page.
+	•	Updated the project's underlying software and dependencies to keep it buildable and running today.
 	•	Various small bug fixes found and fixed while running this fork in production (see the commit history of this fork for details).
 
 Credits
 
     Original project and design: Dennis (github.com/denhoo4/audiostreamlogger).
-    Changes in this fork: William.
+    Changes in this fork: wtmp0611.

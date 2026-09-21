@@ -24,6 +24,8 @@ Getting Started
         git clone https://github.com/<your-username>/audiostreamlogger.git
         cd audiostreamlogger
 
+        Before continuing: create your own settings.json in this folder - see "Configuration" below for the required format and a working example. The application will not start without it.
+
     2.	Build and run the application:
         docker compose up --build -d
 

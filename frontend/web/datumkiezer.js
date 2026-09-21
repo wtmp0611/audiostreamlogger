@@ -223,14 +223,46 @@ laadKnop.addEventListener('click', () => {
 
 // =====================================================================
 // Opstarten: zender-lijst vullen en de echte opname-gegevens ophalen.
+//
+// TOEGEVOEGD (William, 9 sept 2026): de opnamegegevens werden voorheen
+// maar EEN keer opgehaald, bij het openen van de pagina. Daardoor bleef
+// het lopende uur voor altijd grijs/niet-aanklikbaar als je de pagina
+// open liet staan -- het bestand van dat uur ontstaat namelijk pas NA
+// het laden van de pagina. Oplossing: elk heel uur (met een minuutje
+// speling voor de recorder) automatisch opnieuw ophalen, zonder dat de
+// gebruiker de pagina zelf hoeft te verversen.
 // =====================================================================
-Promise.all([
-    fetch('/api/settings').then((r) => r.json()),
-    fetch('/api/settings2').then((r) => r.json()),
-])
-    .then(([settings, settings2]) => {
-        opnamesPerZender = bouwOpnamesPerZender(settings, settings2);
+function haalOpnamesDataOp() {
+    return Promise.all([
+        fetch('/api/settings').then((r) => r.json()),
+        fetch('/api/settings2').then((r) => r.json()),
+    ]);
+}
 
+function verwerkOpnamesData(settings, settings2) {
+    opnamesPerZender = bouwOpnamesPerZender(settings, settings2);
+    werkDatumGrenzenBij();
+    werkUrenLijstBij();
+}
+
+function plantVolgendeVerversing() {
+    const nu = new Date();
+    const volgendeRonde = new Date(nu);
+    volgendeRonde.setMinutes(1, 0, 0); // xx:01:00
+    if (volgendeRonde <= nu) {
+        volgendeRonde.setHours(volgendeRonde.getHours() + 1);
+    }
+    const wachttijd = volgendeRonde - nu;
+    setTimeout(() => {
+        haalOpnamesDataOp()
+            .then(([settings, settings2]) => verwerkOpnamesData(settings, settings2))
+            .catch((err) => console.error('Kon opnamegegevens niet verversen:', err))
+            .finally(() => plantVolgendeVerversing());
+    }, wachttijd);
+}
+
+haalOpnamesDataOp()
+    .then(([settings, settings2]) => {
         zenderSelect.innerHTML = '';
         settings.forEach((zender) => {
             const optie = document.createElement('option');
@@ -239,8 +271,8 @@ Promise.all([
             zenderSelect.appendChild(optie);
         });
 
-        werkDatumGrenzenBij();
-        werkUrenLijstBij();
+        verwerkOpnamesData(settings, settings2);
+        plantVolgendeVerversing();
     })
     .catch((err) => {
         console.error('Kon zender-/opnamegegevens niet ophalen:', err);

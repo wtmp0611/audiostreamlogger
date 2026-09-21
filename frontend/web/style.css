@@ -176,14 +176,30 @@ input[type="date"] {
     font: 12px Arial;
     cursor: pointer;
 }
+/* AANGEPAST (William, 12 sept 2026): met alleen "vet vs. niet-vet" als
+   verschil tussen het huidige uur en de rest, waren die twee naast elkaar
+   moeilijk te onderscheiden -- de niet-actieve (maar wel degelijk
+   beschikbare!) uren leken daardoor per ongeluk "grijs/niet beschikbaar",
+   terwijl ze dat niet waren. Nu drie duidelijk verschillende toestanden,
+   ieder met een eigen achtergrondkleur, zodat je een uur niet meer naast
+   een ander hoeft te leggen om het verschil te zien:
+   - geen opname voor dit uur:      grijze achtergrond, lichtgrijze cijfers
+   - wel een opname, niet actief:   lichtblauwe achtergrond, zwarte cijfers
+   - wel een opname, HET huidige/gekozen uur: iets donkerder blauw, vet */
 .uurCel:disabled {
+    background: #ddd;
     color: #aaa;
     cursor: default;
 }
+.uurCel:not(:disabled) {
+    background: #dceaf7;
+    color: #000;
+}
 .uurCel.actief {
-    background: #cde;
+    background: #a9cce8;
     font-weight: bold;
 }
+
 
 #geenOpnamesDieDag {
     text-align: center;
